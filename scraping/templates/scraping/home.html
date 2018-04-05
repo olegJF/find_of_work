@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"></head>
+<body>
+<h1> Hi there!</h1>
+{%for job in jobs %}
+    <h4>{{job.company}}</h4>
+    <a href='{{job.href}}'>{{job.title}}</a>
+    <p>{{job.descript}}</p><br/>
+    <hr><br/>
+{% endfor %}
+</body>
+</html>
