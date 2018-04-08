@@ -3,6 +3,7 @@ bs4==0.0.1
 certifi==2018.1.18
 chardet==3.0.4
 Django==1.11.12
+gunicorn==19.7.1
 idna==2.6
 pytz==2018.3
 requests==2.18.4
