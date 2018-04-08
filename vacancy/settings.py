@@ -25,7 +25,7 @@ SECRET_KEY = 'j=-18sfwb#6*&u+g)kc#b6f1l#2r^8qot2^iy#7$!_afp#r0b3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['glacial-retreat-97921.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -119,3 +119,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
