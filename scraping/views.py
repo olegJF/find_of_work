@@ -12,7 +12,7 @@ def djinni_scraping(request):
     site = Site.objects.get_or_create(name='Djinni.co')
     url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
+                                    timestamp__gte=TWO_DAYS_AGO)#.values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
     jobs = []
     jobs = djinni(url.address)
@@ -32,7 +32,7 @@ def work_scraping(request):
     site = Site.objects.get_or_create(name='Work.ua')
     url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
+                                    timestamp__gte=TWO_DAYS_AGO)#.values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
     jobs = []
     jobs = work(url.address)
@@ -54,7 +54,7 @@ def rabota_scraping(request):
     site = Site.objects.get_or_create(name='Rabota.ua')
     url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
+                                    timestamp__gte=TWO_DAYS_AGO)# .values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
     jobs = []
     jobs = rabota(url.address)
@@ -75,7 +75,7 @@ def dou_scraping(request):
     site = Site.objects.get_or_create(name='Dou.ua')
     url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
+                                    timestamp__gte=TWO_DAYS_AGO)#.values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
     jobs = []
     jobs = dou(url.address)
