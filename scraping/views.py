@@ -10,7 +10,7 @@ def djinni_scraping(request):
     city = City.objects.get_or_create(name='Киев')
     specialty = Specialty.objects.get_or_create(name='Python')
     site = Site.objects.get_or_create(name='Djinni.co')
-    url = Url.objects.get(city=city, specialty=specialty, site=site)
+    url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
                                     timestamp__gte=TWO_DAYS_AGO).values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
@@ -30,7 +30,7 @@ def work_scraping(request):
     city = City.objects.get_or_create(name='Киев')
     specialty = Specialty.objects.get_or_create(name='Python')
     site = Site.objects.get_or_create(name='Work.ua')
-    url = Url.objects.get(city=city, specialty=specialty, site=site)
+    url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
                                     timestamp__gte=TWO_DAYS_AGO).values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
@@ -52,7 +52,7 @@ def rabota_scraping(request):
     city = City.objects.get_or_create(name='Киев')
     specialty = Specialty.objects.get_or_create(name='Python')
     site = Site.objects.get_or_create(name='Rabota.ua')
-    url = Url.objects.get(city=city, specialty=specialty, site=site)
+    url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
                                     timestamp__gte=TWO_DAYS_AGO).values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
@@ -73,7 +73,7 @@ def dou_scraping(request):
     city = City.objects.get_or_create(name='Киев')
     specialty = Specialty.objects.get_or_create(name='Python')
     site = Site.objects.get_or_create(name='Dou.ua')
-    url = Url.objects.get(city=city, specialty=specialty, site=site)
+    url = 'url' # Url.objects.get(city=city, specialty=specialty, site=site)
     vacancy = Vacancy.objects.filter(city=city, specialty=specialty, site=site,
                                     timestamp__gte=TWO_DAYS_AGO).values('url')
     vacancy_url_list = [i['url'] for i in vacancy]
