@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from scraping.views import djinni_scraping, work_scraping, rabota_scraping, dou_scraping
+from scraping.views import save_to_db
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', dou_scraping, name='scraping'),
+    url(r'^', save_to_db, name='scraping'),
 ]

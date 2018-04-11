@@ -6,7 +6,7 @@ class VacancyAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Vacancy
-    list_display = ('title', 'city', 'site', 'timestamp')
+    list_display = ('title', 'city', 'timestamp')
 
 
 admin.site.register(City)

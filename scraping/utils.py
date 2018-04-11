@@ -135,7 +135,7 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
                     title = h3.a.text
                     logo = tr.find('p', attrs={'class':'f-vacancylist-companyname'})
                     if logo:
-                        company = logo.a.text
+                        company = logo.text
                     posted = ''
                     when_posted = tr.find('p', attrs={'class':'f-vacancylist-agotime'})
                     if when_posted:

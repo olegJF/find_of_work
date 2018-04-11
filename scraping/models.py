@@ -57,7 +57,6 @@ class Vacancy(models.Model):
     description = models.TextField(verbose_name='Описание вакансии', blank=True)
     company = models.CharField(max_length=250, verbose_name='Вакансия от компании', blank=True)
     city = models.ForeignKey(City, verbose_name='Город')
-    site = models.ForeignKey(Site, verbose_name='Сайт с размещением вакансии', blank=True)
     specialty = models.ForeignKey(Specialty, verbose_name='Специальность')
     timestamp = models.DateField(auto_now_add=True)
     
