@@ -53,7 +53,7 @@ class Url(models.Model):
 
 class Vacancy(models.Model):
     title = models.CharField(max_length=250, verbose_name='Заголовок вакансии')
-    url = models.CharField(max_length=250, verbose_name='Интернет адрес вакансии')
+    url = models.CharField(max_length=250, verbose_name='Интернет адрес вакансии', unique=True, default=None)
     description = models.TextField(verbose_name='Описание вакансии', blank=True)
     company = models.CharField(max_length=250, verbose_name='Вакансия от компании', blank=True)
     city = models.ForeignKey(City, verbose_name='Город')
