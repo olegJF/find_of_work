@@ -136,15 +136,15 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
                     logo = tr.find('p', attrs={'class':'f-vacancylist-companyname'})
                     if logo:
                         company = logo.text
-                    posted = ''
-                    when_posted = tr.find('p', attrs={'class':'f-vacancylist-agotime'})
-                    if when_posted:
-                        posted = when_posted.text
+                    # posted = ''
+                    # when_posted = tr.find('p', attrs={'class':'f-vacancylist-agotime'})
+                    # if when_posted:
+                    #     posted = when_posted.text
                     descr = tr.find('p', attrs={'class':'f-vacancylist-shortdescr'}).text
                     title_list = title.split(' ')
                     if not any(word in stop_list for word in title_list):
                         jobs.append({'href': a_href+h3.a['href'], 
-                                        'title': title+' , '+posted,
+                                        'title': title, # +' , '+posted,
                                         'descript':str(descr), 
                                         'company': company
                                             })

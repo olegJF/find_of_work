@@ -6,7 +6,7 @@ from .models import *
 from subscribers.models import *
 from .utils import *
 
-TWO_DAYS_AGO = datetime.date.today()-datetime.timedelta(2)
+FOUR_DAYS_AGO = datetime.date.today()-datetime.timedelta(3)
 
 def get_all_specialty_in_each_city():
     """ 
@@ -83,6 +83,7 @@ def save_to_db(request):
         city = City.objects.get(id=data['city'])
         specialty = Specialty.objects.get(id=data['specialty'])
         jobs = data['content']
+        jobs.reverse()
         for job in jobs:
             vacancy = Vacancy(city=city, specialty=specialty,
                                 title=job['title'], url=job['href'],
@@ -94,6 +95,11 @@ def save_to_db(request):
                 pass
         
     return render(request, 'scraping/home.html', {'jobs': jobs})
+    
+def delete_old_records():
+    Vacancy.objects.filter(timestamp__lt=FOUR_DAYS_AGO).delete()
+    return True
+
 
 def djinni_scraping(request):
     subscriber = Subscriber.objects.all().first()
