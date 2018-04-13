@@ -1,12 +1,18 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.db import IntegrityError
 import datetime
 
 from .models import *
 from subscribers.models import *
 from .utils import *
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 
-FOUR_DAYS_AGO = datetime.date.today()-datetime.timedelta(3)
+FOUR_DAYS_AGO = datetime.date.today()-datetime.timedelta(4)
+ONE_DAY_AGO = datetime.date.today()-datetime.timedelta(1)
+SUBJECT = 'Vacancy list'
+FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
 
 def get_all_specialty_in_each_city():
     """ 
@@ -72,6 +78,7 @@ def scraping_sites():
         jobs.append(tmp)
     return jobs
 
+
 def save_to_db(request):
     """
     Получает информацию по результату скрапинга и сохраняет её в БД
@@ -101,95 +108,39 @@ def delete_old_records():
     return True
 
 
-def djinni_scraping(request):
-    subscriber = Subscriber.objects.all().first()
-    site = Site.objects.all().filter(name='Djinni.co').first()
-    url = Url.objects.get(city=subscriber.city, specialty=subscriber.specialty,
-                            site=site)
-    vacancy = Vacancy.objects.filter(city=subscriber.city,
-                                    specialty=subscriber.specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
-    vacancy_url_list = [i['url'] for i in vacancy]
-    jobs = []
-    jobs = djinni(url.address)
-    # print(str(vacancy_url_list).encode('utf-8'))
-    for job in jobs:
-        if job['href'] not in vacancy_url_list:
-            vacancy = Vacancy(city=subscriber.city,
-                            specialty=subscriber.specialty, site=site,
-                            title=job['title'], url=job['href'],
-                            description=job['descript'],
-                            company=job['company'])
-            vacancy.save()
-    return render(request, 'scraping/home.html', {'jobs': jobs})
-
-
-def work_scraping(request):
-    site = Site.objects.all().filter(name='Work.ua').first()
-    subscriber = Subscriber.objects.all().first()
-    url = Url.objects.get(city=subscriber.city, specialty=subscriber.specialty,
-                            site=site)
-    vacancy = Vacancy.objects.filter(city=subscriber.city,
-                                    specialty=subscriber.specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
-    vacancy_url_list = [i['url'] for i in vacancy]
-    jobs = []
-    jobs = work(url.address)
-    # print(city, specialty, site, url.address)
-
-    for job in jobs:
-        if job['href'] not in vacancy_url_list:
-            vacancy = Vacancy(city=subscriber.city,
-                            specialty=subscriber.specialty, site=site,
-                            title=job['title'], url=job['href'],
-                            description=job['descript'],
-                            company=job['company'])
-            vacancy.save()
-    return render(request, 'scraping/home.html', {'jobs': jobs})
-
-
-def rabota_scraping(request):
-    site = Site.objects.all().filter(name='Rabota.ua').first()
-    subscriber = Subscriber.objects.all().first()
-    url = Url.objects.get(city=subscriber.city, specialty=subscriber.specialty,
-                            site=site)
-    vacancy = Vacancy.objects.filter(city=subscriber.city,
-                                    specialty=subscriber.specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
-    vacancy_url_list = [i['url'] for i in vacancy]
-    jobs = []
-    jobs = rabota(url.address)
-    # print(city, specialty, site, url.address)
-    for job in jobs:
-        if job['href'] not in vacancy_url_list:
-            vacancy = Vacancy(city=subscriber.city,
-                            specialty=subscriber.specialty, site=site,
-                            title=job['title'], url=job['href'],
-                            description=job['descript'],
-                            company=job['company'])
-            vacancy.save()
-    return render(request, 'scraping/home.html', {'jobs': jobs})
-
-
-def dou_scraping(request):
-    site = Site.objects.all().filter(name='Dou.ua').first()
-    print(site)
-    subscriber = Subscriber.objects.all().first()
-    url = Url.objects.get(city=subscriber.city, specialty=subscriber.specialty,
-                            site=site)
-    vacancy = Vacancy.objects.filter(city=subscriber.city,
-                                    specialty=subscriber.specialty, site=site,
-                                    timestamp__gte=TWO_DAYS_AGO).values('url')
-    vacancy_url_list = [i['url'] for i in vacancy]
-    jobs = []
-    jobs = dou(url.address)
-    # print(city, specialty, site, url.address)
-    for job in jobs:
-        if job['href'] not in vacancy_url_list:
-            vacancy = Vacancy(city=subscriber.city,
-                            specialty=subscriber.specialty, site=site,
-                            title=job['title'], url=job['href'],
-                            description=job['descript'],
-                            company=job['company'])
-            vacancy.save()
-    return render(request, 'scraping/home.html', {'jobs': jobs})
+def get_set_of_all_cities_and_specialties():
+    """ 
+    Построение множества кортежей по данным всех подписчиков, 
+    с парами id города и id специальности 
+    """
+    qs = Subscriber.objects.all().values('city', 'specialty')
+    data = set([(i['city'], i['specialty']) for i in qs])
+    return data
+    
+    
+def send_emails_to_all_subscribers(request):
+    data_of_requests = get_set_of_all_cities_and_specialties()
+    for pair in data_of_requests:
+        template = '<!doctype html><html lang="en"><head><meta charset="utf-8"></head><body>'
+        end = '</body></html>'
+        content = ''
+        city = City.objects.get(id=pair[0])
+        specialty = Specialty.objects.get(id=pair[1])
+        email_qs = Subscriber.objects.filter(city=city, 
+                                            specialty=specialty).values('email')
+        emails = [i['email'] for i in email_qs]
+        jobs_qs = Vacancy.objects.filter(city=city, specialty=specialty,
+                                    timestamp=datetime.date.today())
+        for job in jobs_qs:
+            content += '<a href="{}" target="_blank">'.format(job.url)
+            content += '{}</a>'.format(job.title)
+            content += '<br/><p>{}</p><br/>'.format(job.description)
+            content += '<hr><br/>'
+        template = template + content + end
+        for email in emails:
+            recipient_list = [email]
+            text_content = 'This is an important message.'
+            msg = EmailMultiAlternatives(SUBJECT, text_content, FROM_EMAIL, recipient_list)
+            msg.attach_alternative(template, "text/html")
+            msg.send()
+    return HttpResponse( '<h1>God!</h1>')

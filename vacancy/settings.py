@@ -25,8 +25,16 @@ SECRET_KEY = 'j=-18sfwb#6*&u+g)kc#b6f1l#2r^8qot2^iy#7$!_afp#r0b3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+from .secret import PASSWORD, EMAIL
+
 ALLOWED_HOSTS = ['glacial-retreat-97921.herokuapp.com', 'localhost', '127.0.0.1']
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = EMAIL 
+EMAIL_HOST_PASSWORD = PASSWORD
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Vacancy <{email}>'.format(email=EMAIL)
 
 # Application definition
 
