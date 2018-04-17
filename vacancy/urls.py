@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from scraping.views import send_emails_to_all_subscribers
+from scraping.views import send_emails_to_all_subscribers, save_to_db
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', send_emails_to_all_subscribers, name='scraping'),
+    url(r'^send/$', send_emails_to_all_subscribers, name='send'),
+    url(r'^', save_to_db, name='scraping'),
 ]

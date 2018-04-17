@@ -9,7 +9,7 @@ from .utils import *
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 
-FOUR_DAYS_AGO = datetime.date.today()-datetime.timedelta(4)
+WEEK_AGO = datetime.date.today()-datetime.timedelta(7)
 ONE_DAY_AGO = datetime.date.today()-datetime.timedelta(1)
 SUBJECT = 'Vacancy list'
 FROM_EMAIL = settings.DEFAULT_FROM_EMAIL
@@ -104,7 +104,7 @@ def save_to_db(request):
     return render(request, 'scraping/home.html', {'jobs': jobs})
     
 def delete_old_records():
-    Vacancy.objects.filter(timestamp__lt=FOUR_DAYS_AGO).delete()
+    Vacancy.objects.filter(timestamp__lt=WEEK_AGO).delete()
     return True
 
 
@@ -126,7 +126,7 @@ def send_emails_to_all_subscribers(request):
         content = ''
         city = City.objects.get(id=pair[0])
         specialty = Specialty.objects.get(id=pair[1])
-        email_qs = Subscriber.objects.filter(city=city, 
+        email_qs = Subscriber.objects.all().filter(city=city, 
                                             specialty=specialty).values('email')
         emails = [i['email'] for i in email_qs]
         jobs_qs = Vacancy.objects.filter(city=city, specialty=specialty,
