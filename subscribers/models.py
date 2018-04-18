@@ -22,7 +22,8 @@ class Subscriber(models.Model):
     city = models.ForeignKey(City, verbose_name='Город')
     specialty = models.ForeignKey(Specialty, verbose_name='Специальность')
     email = models.CharField(max_length=50, verbose_name='Имэйл', unique=True)
-    is_active = models.BooleanField(default=True)
+    password = models.CharField(max_length=50, verbose_name='Пароль')
+    is_active = models.BooleanField(default=True, verbose_name='Получать рассылку?')
     
     objects = SubscriberManager()
 

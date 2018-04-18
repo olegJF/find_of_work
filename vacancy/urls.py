@@ -16,9 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from scraping.views import send_emails_to_all_subscribers, save_to_db
+from subscribers import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^send/$', send_emails_to_all_subscribers, name='send'),
-    url(r'^', save_to_db, name='scraping'),
+    url(r'^job/$', save_to_db, name='scraping'),
+    url(r'update/$', views.update_subscriber, name='update'),
+    url(r'^login/$', views.login_subscriber, name='login'),
+    url(r'^', views.SubscriberCreate.as_view(), name='home'),
 ]
