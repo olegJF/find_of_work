@@ -97,6 +97,7 @@ def work(base_url, stop_list = ['Senior', 'Sr.']):
                             'descript': '', 'company': ''
                                 })
     return jobs
+
     
 def rabota(base_url, stop_list = ['Senior', 'Sr.']):
     yesterday=datetime.date.today()-datetime.timedelta(1)
