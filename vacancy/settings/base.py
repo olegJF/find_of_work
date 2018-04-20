@@ -25,7 +25,7 @@ SECRET_KEY = 'j=-18sfwb#6*&u+g)kc#b6f1l#2r^8qot2^iy#7$!_afp#r0b3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-from .secret import PASSWORD, EMAIL
+from .secret import PASSWORD, EMAIL, DB_PASSWORD
 
 ALLOWED_HOSTS = ['glacial-retreat-97921.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -86,8 +86,12 @@ WSGI_APPLICATION = 'vacancy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'vacancy',
+        'USER': 'postgres',
+        'PASSWORD': DB_PASSWORD,
+        'HOST': '',
+        'PORT': '',
     }
 }
 
