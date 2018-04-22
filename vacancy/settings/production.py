@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'vacancy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'vacancy',
-        'USER': 'postgres',
-        'PASSWORD': DB_PASSWORD,
-        'HOST': '',
-        'PORT': '',
+        'NAME': 'd7ijgcpb8h6tpp',
+        'USER': 'vxrfaldkhgyjlq',
+        'PASSWORD': '7d5db0f27a8dea68fb6fe48a04cdcb33306d3b5adcca3e215aebc4e04a27828f',
+        'HOST': 'ec2-50-19-88-36.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
