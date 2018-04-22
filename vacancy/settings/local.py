@@ -87,8 +87,8 @@ WSGI_APPLICATION = 'vacancy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'vacancy',
-        'USER': 'postgres',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
         'HOST': '',
         'PORT': '',
