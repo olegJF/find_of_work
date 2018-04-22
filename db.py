@@ -1,18 +1,18 @@
-from vacancy.settings.secret import DB_PASSWORD
+# from vacancy.settings.secret import DB_PASSWORD
 from scraping.utils import *
-
+import os
 import psycopg2
 import logging
 import datetime
 
-
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
 today = datetime.date.today()
 try:
     conn = psycopg2.connect(dbname='vacancy', user='postgres', host='localhost', password=DB_PASSWORD)
     # print('Opened DB')
 except:
     logging.exception('Unable to open DB - {}'.format(today))
-    
+
 else:
     cur = conn.cursor()
     cur.execute("SELECT city_id, specialty_id FROM subscribers_subscriber WHERE is_active=%s;", (True,))
@@ -39,7 +39,7 @@ else:
                 site_id = item[0]
                 tmp[sites[site_id]] = item[1]
             url_list.append(tmp)
-    # print('url_list')    
+    # print('url_list')
     all_data = []
     for url in url_list:
         tmp = {}
@@ -53,8 +53,8 @@ else:
         tmp['content'] = tmp_content
         all_data.append(tmp)
     # print('scraping_list')
-    
-    cur.execute("SET TIME ZONE 'Europe/Kiev';")   
+
+    cur.execute("SET TIME ZONE 'Europe/Kiev';")
     for data in all_data:
         city = data['city']
         specialty = data['specialty']
@@ -64,14 +64,14 @@ else:
             cur.execute("SELECT * FROM scraping_vacancy WHERE url=%s;", (job['href'],))
             qs = cur.fetchone()
             if not qs:
-                cur.execute("""INSERT INTO scraping_vacancy (city_id, 
-                    specialty_id, title, url, description, company, timestamp) 
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)""", 
-                    (city, specialty, job['title'], job['href'], 
+                cur.execute("""INSERT INTO scraping_vacancy (city_id,
+                    specialty_id, title, url, description, company, timestamp)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                    (city, specialty, job['title'], job['href'],
                     job['descript'], job['company'], today))
 
 
-            
+
     # print('Done')
     conn.commit()
     cur.close()
