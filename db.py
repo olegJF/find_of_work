@@ -6,9 +6,14 @@ import logging
 import datetime
 
 DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
+
 today = datetime.date.today()
 try:
-    conn = psycopg2.connect(dbname='vacancy', user='postgres', host='localhost', password=DB_PASSWORD)
+    conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, host=DB_HOST,
+                            password=DB_PASSWORD)
     # print('Opened DB')
 except:
     logging.exception('Unable to open DB - {}'.format(today))
@@ -18,7 +23,7 @@ else:
     cur.execute("SELECT city_id, specialty_id FROM subscribers_subscriber WHERE is_active=%s;", (True,))
     cities_qs = cur.fetchall()
     # print(cities_qs)
-    todo_list = {i[0]:set() for i in cities_qs}
+    todo_list = {i[0]: set() for i in cities_qs}
     for i in cities_qs:
         todo_list[i[0]].add(i[1])
     # print(todo_list)
@@ -44,10 +49,10 @@ else:
     for url in url_list:
         tmp = {}
         tmp_content = []
-        tmp_content.extend( djinni(url['Djinni.co']))
-        tmp_content.extend( work(url['Work.ua']))
-        tmp_content.extend( rabota(url['Rabota.ua']))
-        tmp_content.extend( dou(url['Dou.ua']))
+        tmp_content.extend(djinni(url['Djinni.co']))
+        tmp_content.extend(work(url['Work.ua']))
+        tmp_content.extend(rabota(url['Rabota.ua']))
+        tmp_content.extend(dou(url['Dou.ua']))
         tmp['city'] = url['city']
         tmp['specialty'] = url['specialty']
         tmp['content'] = tmp_content
