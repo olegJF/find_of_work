@@ -6,7 +6,10 @@ import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-if os.path.exists('F:\Django_Python Projects\vacancy\src\vacancy\settings\secret.py'):
+dir = os.path.dirname(os.path.abspath('send_emails.py'))
+path = ''.join([dir, '\\vacancy\\settings\\secret.py'])
+
+if os.path.exists(path):
     print('File exists')
     from vacancy.settings.secret import (DB_PASSWORD, DB_HOST, EMAIL,
                                         DB_NAME, DB_USER, PASSWORD)

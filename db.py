@@ -5,10 +5,19 @@ import psycopg2
 import logging
 import datetime
 
-DB_PASSWORD = os.environ.get('DB_PASSWORD')
-DB_HOST = os.environ.get('DB_HOST')
-DB_NAME = os.environ.get('DB_NAME')
-DB_USER = os.environ.get('DB_USER')
+dir = os.path.dirname(os.path.abspath('send_emails.py'))
+path = ''.join([dir, '\\vacancy\\settings\\secret.py'])
+
+if os.path.exists(path):
+    print('File exists')
+    from vacancy.settings.secret import (DB_PASSWORD, DB_HOST, DB_NAME, DB_USER)
+else:
+    DB_PASSWORD = os.environ.get('DB_PASSWORD')
+    DB_HOST = os.environ.get('DB_HOST')
+    DB_NAME = os.environ.get('DB_NAME')
+    DB_USER = os.environ.get('DB_USER')
+# print(DB_PASSWORD, DB_HOST,  DB_NAME, DB_USER, )
+
 
 today = datetime.date.today()
 try:
@@ -20,7 +29,8 @@ except:
 
 else:
     cur = conn.cursor()
-    cur.execute("SELECT city_id, specialty_id FROM subscribers_subscriber WHERE is_active=%s;", (True,))
+    cur.execute("""SELECT city_id, specialty_id FROM subscribers_subscriber 
+                    WHERE is_active=%s;""", (True,))
     cities_qs = cur.fetchall()
     # print(cities_qs)
     todo_list = {i[0]: set() for i in cities_qs}
@@ -35,7 +45,8 @@ else:
     for city in todo_list:
         for sp in todo_list[city]:
             tmp = {}
-            cur.execute("SELECT site_id, address FROM scraping_url WHERE city_id=%s AND specialty_id=%s;",(city, sp ))
+            cur.execute("""SELECT site_id, address FROM scraping_url 
+                        WHERE city_id=%s AND specialty_id=%s;""",(city, sp ))
             qs = cur.fetchall()
             # print(qs)
             tmp['city'] = city
@@ -44,7 +55,7 @@ else:
                 site_id = item[0]
                 tmp[sites[site_id]] = item[1]
             url_list.append(tmp)
-    # print('url_list')
+    # print(url_list)
     all_data = []
     for url in url_list:
         tmp = {}
@@ -59,14 +70,15 @@ else:
         all_data.append(tmp)
     # print('scraping_list')
 
-    cur.execute("SET TIME ZONE 'Europe/Kiev';")
+   #   cur.execute("SET TIME ZONE 'Europe/Kiev';")
     for data in all_data:
         city = data['city']
         specialty = data['specialty']
         jobs = data['content']
         jobs.reverse()
         for job in jobs:
-            cur.execute("SELECT * FROM scraping_vacancy WHERE url=%s;", (job['href'],))
+            cur.execute("""SELECT * FROM scraping_vacancy WHERE url=%s;""", 
+                            (job['href'],))
             qs = cur.fetchone()
             if not qs:
                 cur.execute("""INSERT INTO scraping_vacancy (city_id,
@@ -77,7 +89,7 @@ else:
 
 
 
-    # print('Done')
+ #    # print('Done')
     conn.commit()
     cur.close()
     conn.close()
