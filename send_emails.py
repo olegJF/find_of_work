@@ -10,7 +10,7 @@ dir = os.path.dirname(os.path.abspath('send_emails.py'))
 path = ''.join([dir, '\\vacancy\\settings\\secret.py'])
 
 if os.path.exists(path):
-    print('File exists')
+    # print('File exists')
     from vacancy.settings.secret import (DB_PASSWORD, DB_HOST, EMAIL,
                                         DB_NAME, DB_USER, PASSWORD)
 else:
@@ -20,7 +20,7 @@ else:
     DB_HOST = os.environ.get('DB_HOST')
     DB_NAME = os.environ.get('DB_NAME')
     DB_USER = os.environ.get('DB_USER')
-print(DB_PASSWORD, DB_HOST, EMAIL, DB_NAME, DB_USER, PASSWORD)
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = EMAIL
 EMAIL_HOST_PASSWORD = PASSWORD
@@ -34,7 +34,7 @@ today = datetime.date.today()
 try:
     conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, host=DB_HOST,
                             password=PASSWORD)
-    print('Opened DB')
+    # print('Opened DB')
 except psycopg2.DatabaseError:
     logging.exception('Unable to open DB - {}'.format(today))
 else:
@@ -94,7 +94,7 @@ else:
         # print(str(template).encode('utf-8'))
     # return HttpResponse( '<h1>God!</h1>')
 
-    print('Done')
+    # print('Done')
     conn.commit()
     cur.close()
     conn.close()
