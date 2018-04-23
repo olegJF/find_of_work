@@ -20,7 +20,10 @@ from subscribers import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'update/$', views.update_subscriber, name='update'),
+    url(r'^update/$', views.update_subscriber, name='update'),
     url(r'^login/$', views.login_subscriber, name='login'),
-    url(r'^', views.SubscriberCreate.as_view(), name='home'),
+    url(r'^list/', vacancy_list, name='list'),
+    url(r'^subscribe/$', views.SubscriberCreate.as_view(), name='subscribe'),
+    url(r'^', home, name='home'),
+    
 ]

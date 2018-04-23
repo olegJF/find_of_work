@@ -27,8 +27,9 @@
   
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-light fixed-top" style="background-color: #e3f2fd;">
-      <a class="navbar-brand" href="#">Вакансии</a>
+<div  class="container">
+      <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: rgb(181, 100, 230);">
+      <a class="navbar-brand" href="{% url 'home' %}">Вакансии</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -36,18 +37,19 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Главная<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{% url 'home' %}">Главная<span class="sr-only">(current)</span></a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="#">Города<span class="sr-only"></span></a>
+            <a class="nav-link" href="{% url 'subscribe' %}">Подписаться<span class="sr-only"></span></a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link" href="#">Поезда<span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{% url 'login' %}">Редактировать профиль<span class="sr-only">(current)</span></a>
           </li>
+          <!-- 
           <li class="nav-item ">
             <a class="nav-link" href="#">Маршруты<span class="sr-only">(current)</span></a>
           </li>
-            <!-- 
+            
                   <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" 
                         id="dropdown01" data-toggle="dropdown" 
@@ -65,7 +67,8 @@
         </ul>
         
       </div>
-    </nav>
+      </nav>
+</div>
 
     <main role="main" class="container">
 

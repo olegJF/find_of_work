@@ -165,7 +165,7 @@ def dou(base_url, stop_list = ['Senior', 'Sr.']):
     session = requests.Session()
     urls, jobs = [], []
     urls.append(base_url)
-    a_href = 'https://www.work.ua'
+    a_href = 'https://www.dou.ua'
     req = session.get(base_url, headers=headers)
     if req.status_code == 200:
         bsObj = BS(req.content, "html.parser")

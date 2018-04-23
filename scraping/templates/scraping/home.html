@@ -1,11 +1,41 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"></head>
-<body>
-<h1> Hi there!</h1>
-{%for job in jobs %}
-    <h4>{{job.company}}</h4>
-    <a href='{{job.href}}'>{{job.title}}</a>
-    <p>{{job.descript}}</p><br/>
-    <hr><br/>
-{% endfor %}
-</body>
-</html>
+{% extends 'base.html' %}
+{%load static%}
+{% block title %}{% endblock %}
+
+{% block content %}
+<div  class="container">
+   <div class="row">
+        <div class="col-md-10 left">
+        <h1>Сервис по сбору вакансий с сайтов djinni.co, work.ua, rabota.ua и dou.ua</h1>
+        </div>
+    </div>
+    <hr>
+   <div class="row">
+        <div class="col-md-6 mx-auto left">
+            <h4> Показать существующие вакансии</h3>
+            <form class="update-data-form" action="{% url 'list' %}" method="get">
+                <div class="row my-4">
+                    <div class="col-md-4 text-right">
+                        <label for="id_city">Город:</label>
+                    </div>
+                    <div class="col-md-8 ">
+                        {{form.city}}
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col-md-4 text-right">
+                        <label for="id_specialty">Специальность:</label>
+                    </div>
+                    <div class="col-md-8 ">
+                        {{form.specialty}}
+                    </div>
+                </div>
+                <button type="submit" class='btn btn-success ' >Показать</button>
+            </form>
+               
+    
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

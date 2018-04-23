@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block title %}{% endblock %}
+
+{% block content %}
+<div  class="container">
+   <div class="row">
+        <div class="col-md-10 text-left">
+            {% if object_list %}
+                {{city_name}}
+                {{specialty_name}}
+                {% for object in object_list %}
+                    <a href="{{ object.url }}">{{ object.title }} </a>
+                    <p>{{ object.description }} </p>
+                    <p><small>Вакансия от компании: {{ object.company }}  , 
+                    размещена {{ object.timestamp| date:"SHORT_DATE_FORMAT" }} </small></p>
+                    <hr>
+                {% endfor %}
+            {% else %}
+                <h2> По Вашему запросу ничего не найдено.</h2>
+            {% endif %}
+        </div>
+    </div>
+
+
+    
+   <div class="row">
+        <div class="col-md-4 mx-auto left">
+           
+             <form class="update-data-form" action="{% url 'list' %}" method="get">
+                {{form.as_p}}
+          
+                <button type="submit" class='btn btn-success ' >Показать</button>
+            </form>
+               
+    
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
