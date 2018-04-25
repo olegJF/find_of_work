@@ -6,8 +6,10 @@ dj-database-url==0.5.0
 Django==1.11.12
 gunicorn==19.7.1
 idna==2.6
+psycopg2==2.7.4
+python-http-client==3.0.0
 pytz==2018.3
 requests==2.18.4
+sendgrid==5.3.0
 urllib3==1.22
 whitenoise==3.3.1
-psycopg2==2.7.*
