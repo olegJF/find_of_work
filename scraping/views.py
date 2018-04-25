@@ -20,11 +20,12 @@ def vacancy_list(request):
         except ValueError:
             raise Http404("Страница не найдена")
         context = {}
+        context['form'] = form
         qs = Vacancy.objects.filter(city=city_id, specialty=specialty_id)
         if qs:
-            context = {'form': form, 'object_list': qs, 
-                        'city_name': qs[0].city.name, 
-                        'specialty_name': qs[0].specialty.name}
+            context['object_list'] = qs
+            context['city_name'] = qs[0].city.name
+            context['specialty_name'] = qs[0].specialty.name
                                 
         return render(request, 'scraping/list.html', context)
 

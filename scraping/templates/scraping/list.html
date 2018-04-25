@@ -8,7 +8,10 @@
         <div class="col-md-10 text-left">
         
             {% if object_list %}
-                <h3> Вакансии по запросу: город - {{city_name}}, специальность -{{specialty_name}}</h3>
+                <h3 class="text-center"> 
+                    Вакансии по запросу: город - {{city_name}}, 
+                    специальность -{{specialty_name}}
+                </h3>
                 <br/><hr><br/>
                 {% for object in object_list %}
                     <a href="{{ object.url }}" target="_blank">{{ object.title }} </a>
@@ -18,25 +21,40 @@
                     <hr>
                 {% endfor %}
             {% else %}
-                <h2> По Вашему запросу ничего не найдено.</h2>
+                <h2 class="text-center"> По Вашему запросу ничего не найдено.</h2>
             {% endif %}
         </div>
     </div>
 
 
     
-   <div class="row">
-        <div class="col-md-4 mx-auto left">
+  
+        <div class="col-md-7 mx-3 ">
            
              <form class="update-data-form" action="{% url 'list' %}" method="get">
-                {{form.as_p}}
+                <div class="row my-4">
+                    <div class="col-md-4 text-right">
+                        <label for="id_city">Город:</label>
+                    </div>
+                    <div class="col-md-8 ">
+                        {{form.city}}
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col-md-4 text-right">
+                        <label for="id_specialty">Специальность:</label>
+                    </div>
+                    <div class="col-md-8 ">
+                        {{form.specialty}}
+                    </div>
+                </div>
           
                 <button type="submit" class='btn btn-success ' >Показать</button>
             </form>
                
     
         </div>
-    </div>
+   
     
 </div>
 {% endblock %}
