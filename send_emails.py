@@ -27,11 +27,7 @@ else:
     MAILGUN_KEY = os.environ.get('MAILGUN_KEY')
 
 ADDRESS = "https://api.mailgun.net/v3/sandbox62c562b960c34f34bec9fd5a60c087b2.mailgun.org/messages"
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = EMAIL
-EMAIL_HOST_PASSWORD = PASSWORD
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+
 FROM_EMAIL = 'Vacancy <{email}>'.format(email=EMAIL)
 SUBJECT = 'Список вакансий'
 ONE_DAY_AGO = datetime.date.today()-datetime.timedelta(1)
@@ -82,40 +78,7 @@ else:
                 content += '<hr><br/>'
             template = template + content + end
             for email in emails:
-                # msg = MIMEMultipart('alternative')
-                # msg['Subject'] = 'Список вакансий для {}'.format(today)
-                # msg['From'] = FROM_EMAIL
-                # msg['To'] = email
-                # # recipient_list = [email]
-                # text = 'This is an important message.'
-                # part1 = MIMEText(text, 'plain')
-                # part2 = MIMEText(template, 'html')
-    
-                # msg.attach(part1)
-                # msg.attach(part2)
-                # s = smtplib.SMTP('smtp.gmail.com', 587)
-                # s.connect('smtp.gmail.com', 587)
-                # s.ehlo()
-                # s.starttls()
-                # s.ehlo()
-                # s.login(EMAIL, PASSWORD)
-                # s.sendmail(FROM_EMAIL, email, msg.as_string())
-                # s.quit()
                 Subject = 'Список вакансий за  {}'.format(today)
-                # sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_KEY)
-                # data = {
-                #         "personalizations": [{
-                #             "to": [{"email": email }],
-                #             "subject": Subject
-                #             }],
-                #         "from": {"email": FROM_EMAIL },
-                #         "content": [{"type": "text/html",
-                #             "value": template }]
-                #     }
-                # response = sg.client.mail.send.post(request_body=data)
-                # print(response.status_code)
-                # print(response.body)
-                # print(response.headers)
                 requests.post( ADDRESS, auth=("api", MAILGUN_KEY), 
                                 data={"from": EMAIL, "to": email,
                                 "subject": Subject, "html": template})
