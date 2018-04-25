@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {%load static%}
-{% block title %}{% endblock %}
+{% block title %}Результаты поиска{% endblock %}
 
 {% block content %}
 <div  class="container">
    <div class="row">
         <div class="col-md-10 text-left">
+        
             {% if object_list %}
-                {{city_name}}
-                {{specialty_name}}
+                <h3> Вакансии по запросу: город - {{city_name}}, специальность -{{specialty_name}}</h3>
+                <br/><hr><br/>
                 {% for object in object_list %}
-                    <a href="{{ object.url }}">{{ object.title }} </a>
+                    <a href="{{ object.url }}" target="_blank">{{ object.title }} </a>
                     <p>{{ object.description }} </p>
                     <p><small>Вакансия от компании: {{ object.company }}  , 
                     размещена {{ object.timestamp| date:"SHORT_DATE_FORMAT" }} </small></p>
