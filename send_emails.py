@@ -3,6 +3,8 @@ import smtplib
 import psycopg2
 import logging
 import datetime
+import sendgrid
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -12,7 +14,8 @@ path = ''.join([dir, '\\vacancy\\settings\\secret.py'])
 if os.path.exists(path):
     # print('File exists')
     from vacancy.settings.secret import (DB_PASSWORD, DB_HOST, EMAIL,
-                                        DB_NAME, DB_USER, PASSWORD)
+                                        DB_NAME, DB_USER, PASSWORD, SENDGRID_KEY
+                                        )
 else:
     DB_PASSWORD = os.environ.get('DB_PASSWORD')
     PASSWORD = os.environ.get('PASSWORD')
@@ -20,6 +23,7 @@ else:
     DB_HOST = os.environ.get('DB_HOST')
     DB_NAME = os.environ.get('DB_NAME')
     DB_USER = os.environ.get('DB_USER')
+    SENDGRID_KEY = os.environ.get('SENDGRID_KEY')
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = EMAIL
@@ -76,25 +80,41 @@ else:
                 content += '<hr><br/>'
             template = template + content + end
             for email in emails:
-                msg = MIMEMultipart('alternative')
-                msg['Subject'] = 'Список вакансий для {}'.format(email)
-                msg['From'] = FROM_EMAIL
-                msg['To'] = email
-                # recipient_list = [email]
-                text = 'This is an important message.'
-                part1 = MIMEText(text, 'plain')
-                part2 = MIMEText(template, 'html')
+                # msg = MIMEMultipart('alternative')
+                # msg['Subject'] = 'Список вакансий для {}'.format(today)
+                # msg['From'] = FROM_EMAIL
+                # msg['To'] = email
+                # # recipient_list = [email]
+                # text = 'This is an important message.'
+                # part1 = MIMEText(text, 'plain')
+                # part2 = MIMEText(template, 'html')
     
-                msg.attach(part1)
-                msg.attach(part2)
-                s = smtplib.SMTP('smtp.gmail.com', 587)
-                s.connect('smtp.gmail.com', 587)
-                s.ehlo()
-                s.starttls()
-                s.ehlo()
-                s.login(EMAIL, PASSWORD)
-                s.sendmail(FROM_EMAIL, email, msg.as_string())
-                s.quit()
+                # msg.attach(part1)
+                # msg.attach(part2)
+                # s = smtplib.SMTP('smtp.gmail.com', 587)
+                # s.connect('smtp.gmail.com', 587)
+                # s.ehlo()
+                # s.starttls()
+                # s.ehlo()
+                # s.login(EMAIL, PASSWORD)
+                # s.sendmail(FROM_EMAIL, email, msg.as_string())
+                # s.quit()
+                Subject = 'Рассылка списка вакансий за  {}'.format(today)
+                sg = sendgrid.SendGridAPIClient(apikey=SENDGRID_KEY)
+                data = {
+                        "personalizations": [{
+                            "to": [{"email": email }],
+                            "subject": Subject
+                            }],
+                        "from": {"email": FROM_EMAIL },
+                        "content": [{"type": "text/html",
+                            "value": template }]
+                    }
+                response = sg.client.mail.send.post(request_body=data)
+                # print(response.status_code)
+                # print(response.body)
+                # print(response.headers)
+
         # print(str(template).encode('utf-8'))
     # return HttpResponse( '<h1>God!</h1>')
 
