@@ -1,4 +1,7 @@
 {% load static %}
+{% url 'home' as home_url %}
+{% url 'subscribe' as subscribe_url %}
+{% url 'login' as login_url %}
 <!doctype html>
 <html lang="en">
   <head>
@@ -27,22 +30,22 @@
   
 </head>
 <body>
-<div  class="container">
-      <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: rgb(181, 100, 230);">
-      <a class="navbar-brand" href="{% url 'home' %}">Вакансии</a>
+
+      <nav class="navbar container navbar-expand-lg navbar-light fixed-top" style="background-color: rgb(181, 100, 230);">
+      <a class="navbar-brand" href="{% url 'home' %}">Найти IT</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item {% if request.path == home_url %}active{% endif %}">
             <a class="nav-link" href="{% url 'home' %}">Главная<span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item {% if request.path == subscribe_url %}active{% endif %}">
             <a class="nav-link" href="{% url 'subscribe' %}">Подписаться<span class="sr-only"></span></a>
           </li>
-          <li class="nav-item ">
+          <li class="nav-item {% if request.path == login_url %}active{% endif %}">
             <a class="nav-link" href="{% url 'login' %}">Редактировать профиль<span class="sr-only">(current)</span></a>
           </li>
           <!-- 
@@ -68,11 +71,31 @@
         
       </div>
       </nav>
-</div>
+
 
     <main role="main" class="container">
 
       <div class="starter-template">
+        <div class="container">
+    
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                        {% if messages %} 
+                            <div class="alert 
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                alert-danger 
+                            {%else %} alert-success {% endif %} messages">
+                                    {% for message in messages %}
+                                    <span{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Внимание!  {% endif %}
+                                        {{ message }}<br/>
+                                    </span>
+                                    {% endfor %}
+                            </div>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
         {% block content%} {% endblock %}
       </div>
 
