@@ -25,11 +25,10 @@ SECRET_KEY = 'j=-18sfwb#6*&u+g)kc#b6f1l#2r^8qot2^iy#7$!_afp#r0b3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-PASSWORD, EMAIL, DB_PASSWORD = '', '', ''
-try:
-    from .secret import PASSWORD, EMAIL, DB_PASSWORD
-except:
-    pass
+DB_PASSWORD = os.environ.get('DB_PASSWORD')
+DB_HOST = os.environ.get('DB_HOST')
+DB_NAME = os.environ.get('DB_NAME')
+DB_USER = os.environ.get('DB_USER')
 
 ALLOWED_HOSTS = ['glacial-retreat-97921.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -91,10 +90,10 @@ WSGI_APPLICATION = 'vacancy.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd7ijgcpb8h6tpp',
-        'USER': 'vxrfaldkhgyjlq',
-        'PASSWORD': '7d5db0f27a8dea68fb6fe48a04cdcb33306d3b5adcca3e215aebc4e04a27828f',
-        'HOST': 'ec2-50-19-88-36.compute-1.amazonaws.com',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
         'PORT': '5432',
     }
 }

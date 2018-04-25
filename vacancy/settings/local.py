@@ -25,7 +25,7 @@ SECRET_KEY = 'j=-18sfwb#6*&u+g)kc#b6f1l#2r^8qot2^iy#7$!_afp#r0b3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-from .secret import PASSWORD, EMAIL, DB_PASSWORD
+from .secret import PASSWORD, EMAIL, DB_PASSWORD, DB_HOST, DB_NAME, DB_USER
 
 ALLOWED_HOSTS = ['glacial-retreat-97921.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -90,8 +90,8 @@ DATABASES = {
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD,
-        'HOST': '',
-        'PORT': '',
+        'HOST': DB_HOST,
+        'PORT': '5432',
     }
 }
 
