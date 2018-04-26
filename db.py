@@ -5,6 +5,7 @@ import psycopg2
 import logging
 import datetime
 
+WEEK_AGO = datetime.date.today()-datetime.timedelta(7)
 dir = os.path.dirname(os.path.abspath('send_emails.py'))
 path = ''.join([dir, '\\vacancy\\settings\\secret.py'])
 
@@ -29,7 +30,7 @@ except:
 
 else:
     cur = conn.cursor()
-    cur.execute("""SELECT city_id, specialty_id FROM subscribers_subscriber 
+    cur.execute("""SELECT city_id, specialty_id FROM subscribers_subscriber
                     WHERE is_active=%s;""", (True,))
     cities_qs = cur.fetchall()
     # print(cities_qs)
@@ -45,8 +46,8 @@ else:
     for city in todo_list:
         for sp in todo_list[city]:
             tmp = {}
-            cur.execute("""SELECT site_id, address FROM scraping_url 
-                        WHERE city_id=%s AND specialty_id=%s;""",(city, sp ))
+            cur.execute("""SELECT site_id, address FROM scraping_url
+                        WHERE city_id=%s AND specialty_id=%s;""", (city, sp))
             qs = cur.fetchall()
             # print(qs)
             if qs:
@@ -71,7 +72,7 @@ else:
         all_data.append(tmp)
     # print('scraping_list')
 
-   #   cur.execute("SET TIME ZONE 'Europe/Kiev';")
+    # cur.execute("SET TIME ZONE 'Europe/Kiev';")
     if all_data:
         for data in all_data:
             city = data['city']
@@ -79,19 +80,19 @@ else:
             jobs = data['content']
             jobs.reverse()
             for job in jobs:
-                cur.execute("""SELECT * FROM scraping_vacancy WHERE url=%s;""", 
-                                (job['href'],))
+                cur.execute("""SELECT * FROM scraping_vacancy WHERE url=%s;""",
+                            (job['href'],))
                 qs = cur.fetchone()
                 if not qs:
                     cur.execute("""INSERT INTO scraping_vacancy (city_id,
                         specialty_id, title, url, description, company, timestamp)
                         VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-                        (city, specialty, job['title'], job['href'],
-                        job['descript'], job['company'], today))
+                                (city, specialty, job['title'], job['href'],
+                                    job['descript'], job['company'], today))
 
-
-
- #    # print('Done')
+    cur.execute("""DELETE FROM scraping_vacancy WHERE timestamp <=%s;""",
+                (WEEK_AGO,))
+    # print('Done')
     conn.commit()
     cur.close()
     conn.close()
