@@ -26,11 +26,10 @@ except:
 
 else:
     cur = conn.cursor()
-    cur.execute("""DELETE FROM scraping_vacancy WHERE timestamp <=%s;""", 
-                            (WEEK_AGO,))
+    cur.execute("""DELETE FROM scraping_vacancy WHERE timestamp <=%s;""",
+                (WEEK_AGO,))
     # qs = cur.fetchall()
     # print(len(qs))
     conn.commit()
     cur.close()
     conn.close()
-
