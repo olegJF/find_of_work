@@ -3,8 +3,11 @@ from bs4 import BeautifulSoup as BS
 import codecs
 import time
 import datetime
+import random
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:47.0) Gecko/20100101 Firefox/47.0','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}
+headers = [{'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:47.0) Gecko/20100101 Firefox/47.0','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'},
+{'User-Agent': 'Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'},
+{'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; rv:53.0) Gecko/20100101 Firefox/53.0','Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}]
 
 def djinni(base_url, stop_list = ['Senior', 'Sr.']):
     base_url = base_url
@@ -14,7 +17,8 @@ def djinni(base_url, stop_list = ['Senior', 'Sr.']):
     urls.append(base_url+'&page=2')
     a_href = 'https://djinni.co'
     for url in urls:
-        req = session.get(url, headers=headers)
+        nmbr = random.randint(0, 2)
+        req = session.get(url, headers=headers[nmbr])
         time.sleep(2)
         if req.status_code == 200:
             bsObj = BS(req.content, "html.parser")
@@ -34,25 +38,16 @@ def djinni(base_url, stop_list = ['Senior', 'Sr.']):
                                         'title': title, 
                                         'descript': str(descr),
                                         'company': 'No name'})
-                                        
-            else:
-                jobs.append({'href': url, 
-                                'title': 'The page is empty',
-                                'descript': '', 'company': ''
-                                    })
-        else:
-            jobs.append({'href': base_url, 
-                            'title': 'Page do not response',
-                            'descript': '', 'company': ''
-                                })
     return jobs
     
+
 def work(base_url, stop_list = ['Senior', 'Sr.']):
     session = requests.Session()
     urls, jobs = [], []
     urls.append(base_url)
     a_href = 'https://www.work.ua'
-    req = session.get(base_url, headers=headers)
+    nmbr = random.randint(0, 2)
+    req = session.get(base_url, headers=headers[nmbr])
     if req.status_code == 200:
         bsObj = BS(req.content, "html.parser")
         pagination = bsObj.find('ul', attrs={'class':'pagination'})
@@ -61,14 +56,10 @@ def work(base_url, stop_list = ['Senior', 'Sr.']):
             for page in pages:
                 urls.append(a_href+page.a['href'])
         
-    else:
-        jobs.append({'href': base_url, 
-                        'title': 'Page do not response',
-                        'descript': '', 'company': ''
-                            })    
     for url in urls:
         time.sleep(2)
-        req = session.get(url, headers=headers)
+        nmbr = random.randint(0, 2)
+        req = session.get(url, headers=headers[nmbr])
         if req.status_code == 200:
             list_of_div = bsObj.find_all('div', attrs={'class':'job-link'})
             if list_of_div:
@@ -86,16 +77,7 @@ def work(base_url, stop_list = ['Senior', 'Sr.']):
                                         'descript': str(div.p.text), 
                                         'company': company
                                         })
-            else:
-                jobs.append({'href': url, 
-                                'title': 'The page is empty',
-                                'descript': '', 'company': ''
-                                    })
-        else:
-            jobs.append({'href': url, 
-                            'title': 'Page do not response',
-                            'descript': '', 'company': ''
-                                })
+    
     return jobs
 
     
@@ -107,8 +89,8 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
     urls, jobs = [], []
     urls.append(base_url)
     a_href = 'https://rabota.ua'
-    
-    req = session.get(base_url, headers=headers)
+    nmbr = random.randint(0, 2)
+    req = session.get(base_url, headers=headers[nmbr])
     if req.status_code == 200:
         bsObj = BS(req.content, "html.parser")
         dl = bsObj.find('dl', attrs={'id':'content_vacancyList_gridList_pagerInnerTable'})
@@ -117,14 +99,11 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
             if pages:
                 for p in pages:
                     urls.append(a_href+p['href'])
-    else:
-        jobs.append({'href': base_url, 
-                        'title': 'Page do not response',
-                        'descript': '', 'company': ''
-                            })
+    
     for url in urls:
         time.sleep(2)
-        req = session.get(url, headers=headers)
+        nmbr = random.randint(0, 2)
+        req = session.get(url, headers=headers[nmbr])
         if req.status_code == 200:
             bsObj = BS(req.content, "html.parser")
             table = bsObj.find('table', attrs={'id':'content_vacancyList_gridList'})
@@ -149,24 +128,16 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
                                         'descript':str(descr), 
                                         'company': company
                                             })
-            else:
-                jobs.append({'href': url, 
-                                'title': 'The page is empty',
-                                'descript': '', 'company': ''
-                                    })
-        else:
-            jobs.append({'href': url, 
-                            'title': 'Page do not response',
-                            'descript': '', 'company': ''
-                                })
     return jobs
+
 
 def dou(base_url, stop_list = ['Senior', 'Sr.']):
     session = requests.Session()
     urls, jobs = [], []
     urls.append(base_url)
     a_href = 'https://www.dou.ua'
-    req = session.get(base_url, headers=headers)
+    nmbr = random.randint(0, 2)
+    req = session.get(base_url, headers=headers[nmbr])
     if req.status_code == 200:
         bsObj = BS(req.content, "html.parser")
        
@@ -187,16 +158,5 @@ def dou(base_url, stop_list = ['Senior', 'Sr.']):
                                     'descript':str(desc.text), 
                                     'company': company
                                         })
-        else:
-            jobs.append({'href': url, 
-                            'title': 'The page is empty',
-                            'descript': '', 'company': ''
-                                })
-    else:
-        jobs.append({'href': url, 
-                        'title': 'Page do not response',
-                        'descript': '', 'company': ''
-                            })                                
-                                    
     return jobs
                                         
