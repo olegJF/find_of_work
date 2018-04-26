@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{%load static%}
+{% block title %}Форма контакта{% endblock %}
+
+{% block content %}
+<div  class="container">
+   <div class="row">
+        <div class="col-md-10 mx-auto "> 
+        <h2>Отравить письмо администратору с предложением,
+         добавить следующие город и специальность для поиска вакансий</h2>
+        <hr/>
+        </div>
+    </div>
+   <div class="row">
+        <div class="col-md-6 mx-auto ">
+           
+            <form class="update-data-form" action="" method="post">{% csrf_token %}
+                {{form.as_p}}
+          
+                <button type="submit" class='btn btn-success ' >Отравить</button>
+                
+            </form>
+               
+    
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

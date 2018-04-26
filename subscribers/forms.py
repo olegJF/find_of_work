@@ -4,13 +4,19 @@ from scraping.models import Specialty, City
 
 class SubscriberModelForm(forms.ModelForm):
     name = forms.CharField(label='Ваше имя', required=True,
-                           widget=forms.TextInput(attrs={"class": 'form-control'}))
-    city = forms.ModelChoiceField(label='Город', queryset=City.objects.all(),
-                                     widget=forms.Select(attrs={"class": 'form-control js-example-basic-single'}))
-    specialty = forms.ModelChoiceField(label='Специальность', queryset=Specialty.objects.all(),
-                                     widget=forms.Select(attrs={"class": 'form-control js-example-basic-single'}))
+                           widget=forms.TextInput(attrs={
+                                                    "class": 'form-control'}))
+    city = forms.ModelChoiceField(label='Город', required=False, 
+                                    queryset=City.objects.all(),
+                                    widget=forms.Select(attrs={
+                                     "class": 'form-control '}))
+    specialty = forms.ModelChoiceField(label='Специальность', required=False,
+                                        queryset=Specialty.objects.all(),
+                                        widget=forms.Select(attrs={
+                                        "class": 'form-control '}))
     email = forms.EmailField(label='Email', required=True,
-                           widget=forms.EmailInput(attrs={"class": 'form-control'}))
+                                widget=forms.EmailInput(attrs={
+                                                "class": 'form-control'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(
                                             attrs={"class": 'form-control'}))
 
@@ -58,3 +64,15 @@ class SubscriberHiddenEmailForm(forms.ModelForm):
     class Meta(object):
         model = Subscriber
         fields = ('name', 'city', 'specialty', 'email', 'password', 'is_active')
+        
+
+class ContactForm(forms.Form):
+    from_email = forms.EmailField(label='Email', required=True,
+                           widget=forms.EmailInput(attrs={"class": 'form-control'}))
+
+    city = forms.CharField(label='Город', required=True,
+                           widget=forms.TextInput(attrs={
+                                                    "class": 'form-control'}))
+    specialty = forms.CharField(label='Специальность', required=True,
+                           widget=forms.TextInput(attrs={
+                                                    "class": 'form-control'}))
