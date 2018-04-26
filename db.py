@@ -36,7 +36,7 @@ else:
     todo_list = {i[0]: set() for i in cities_qs}
     for i in cities_qs:
         todo_list[i[0]].add(i[1])
-    # print(todo_list)
+    print(todo_list)
     cur.execute("SELECT * FROM scraping_site;")
     sites_qs = cur.fetchall()
     sites = {i[0]: i[1] for i in sites_qs}
@@ -49,12 +49,13 @@ else:
                         WHERE city_id=%s AND specialty_id=%s;""",(city, sp ))
             qs = cur.fetchall()
             # print(qs)
-            tmp['city'] = city
-            tmp['specialty'] = sp
-            for item in qs:
-                site_id = item[0]
-                tmp[sites[site_id]] = item[1]
-            url_list.append(tmp)
+            if qs:
+                tmp['city'] = city
+                tmp['specialty'] = sp
+                for item in qs:
+                    site_id = item[0]
+                    tmp[sites[site_id]] = item[1]
+                url_list.append(tmp)
     # print(url_list)
     all_data = []
     for url in url_list:
@@ -71,21 +72,22 @@ else:
     # print('scraping_list')
 
    #   cur.execute("SET TIME ZONE 'Europe/Kiev';")
-    for data in all_data:
-        city = data['city']
-        specialty = data['specialty']
-        jobs = data['content']
-        jobs.reverse()
-        for job in jobs:
-            cur.execute("""SELECT * FROM scraping_vacancy WHERE url=%s;""", 
-                            (job['href'],))
-            qs = cur.fetchone()
-            if not qs:
-                cur.execute("""INSERT INTO scraping_vacancy (city_id,
-                    specialty_id, title, url, description, company, timestamp)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-                    (city, specialty, job['title'], job['href'],
-                    job['descript'], job['company'], today))
+    if all_data:
+        for data in all_data:
+            city = data['city']
+            specialty = data['specialty']
+            jobs = data['content']
+            jobs.reverse()
+            for job in jobs:
+                cur.execute("""SELECT * FROM scraping_vacancy WHERE url=%s;""", 
+                                (job['href'],))
+                qs = cur.fetchone()
+                if not qs:
+                    cur.execute("""INSERT INTO scraping_vacancy (city_id,
+                        specialty_id, title, url, description, company, timestamp)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                        (city, specialty, job['title'], job['href'],
+                        job['descript'], job['company'], today))
 
 
 
