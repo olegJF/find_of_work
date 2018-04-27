@@ -35,7 +35,7 @@ today = datetime.date.today()
 
 try:
     conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, host=DB_HOST,
-                            password=PASSWORD)
+                            password=DB_PASSWORD)
     # print('Opened DB')
 except psycopg2.DatabaseError:
     logging.exception('Unable to open DB - {}'.format(today))
@@ -62,7 +62,7 @@ else:
         email_qs = cur.fetchall()
 
         emails = [i[0] for i in email_qs]
-        cur.execute("""SELECT url, title, description FROM scraping_vacancy 
+        cur.execute("""SELECT url, title, description FROM scraping_vacancy
                     WHERE city_id=%s AND specialty_id=%s AND timestamp=%s;""",
                     (city, specialty, datetime.date.today(),))
         jobs_qs = cur.fetchall()
@@ -79,7 +79,7 @@ else:
             template = template + content + end
             for email in emails:
                 Subject = 'Список вакансий за  {}'.format(today)
-                requests.post( ADDRESS, auth=("api", MAILGUN_KEY), 
+                requests.post( ADDRESS, auth=("api", MAILGUN_KEY),
                                 data={"from": EMAIL, "to": email,
                                 "subject": Subject, "html": template})
 
