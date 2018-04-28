@@ -70,6 +70,7 @@ else:
 
         # jobs_qs = Vacancy.objects.filter(city=city, specialty=specialty,
         #                             timestamp=datetime.date.today())
+        Subject = 'Список вакансий за  {}'.format(today)
         if jobs_qs:
             for job in jobs_qs:
                 content += '<a href="{}" target="_blank">'.format(job[0])
@@ -78,15 +79,19 @@ else:
                 content += '<hr><br/>'
             template = template + content + end
             for email in emails:
-                Subject = 'Список вакансий за  {}'.format(today)
+
                 requests.post( ADDRESS, auth=("api", MAILGUN_KEY),
                                 data={"from": EMAIL, "to": email,
                                 "subject": Subject, "html": template})
+        else:
+            requests.post( ADDRESS, auth=("api", MAILGUN_KEY),
+                            data={"from": EMAIL, "to": 'jf2@ua.fm',
+                            "subject": Subject, "text": 'Список вакансий пуст'})
 
         # print(str(template).encode('utf-8'))
     # return HttpResponse( '<h1>God!</h1>')
 
-    # print('Done')
+    print('Done')
     conn.commit()
     cur.close()
     conn.close()
