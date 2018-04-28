@@ -18,8 +18,6 @@ else:
     DB_NAME = os.environ.get('DB_NAME')
     DB_USER = os.environ.get('DB_USER')
 # print(DB_PASSWORD, DB_HOST,  DB_NAME, DB_USER, )
-
-
 today = datetime.date.today()
 try:
     conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, host=DB_HOST,
@@ -37,7 +35,7 @@ else:
     todo_list = {i[0]: set() for i in cities_qs}
     for i in cities_qs:
         todo_list[i[0]].add(i[1])
-    print(todo_list)
+    # print(todo_list)
     cur.execute("SELECT * FROM scraping_site;")
     sites_qs = cur.fetchall()
     sites = {i[0]: i[1] for i in sites_qs}
@@ -59,19 +57,19 @@ else:
                 url_list.append(tmp)
     # print(url_list)
     all_data = []
-    for url in url_list:
-        tmp = {}
-        tmp_content = []
-        tmp_content.extend(djinni(url['Djinni.co']))
-        tmp_content.extend(work(url['Work.ua']))
-        tmp_content.extend(rabota(url['Rabota.ua']))
-        tmp_content.extend(dou(url['Dou.ua']))
-        tmp['city'] = url['city']
-        tmp['specialty'] = url['specialty']
-        tmp['content'] = tmp_content
-        all_data.append(tmp)
+    if url_list:
+        for url in url_list:
+            tmp = {}
+            tmp_content = []
+            tmp_content.extend(djinni(url['Djinni.co']))
+            tmp_content.extend(work(url['Work.ua']))
+            tmp_content.extend(rabota(url['Rabota.ua']))
+            tmp_content.extend(dou(url['Dou.ua']))
+            tmp['city'] = url['city']
+            tmp['specialty'] = url['specialty']
+            tmp['content'] = tmp_content
+            all_data.append(tmp)
     # print('scraping_list')
-
     # cur.execute("SET TIME ZONE 'Europe/Kiev';")
     if all_data:
         for data in all_data:
@@ -85,8 +83,9 @@ else:
                 qs = cur.fetchone()
                 if not qs:
                     cur.execute("""INSERT INTO scraping_vacancy (city_id,
-                        specialty_id, title, url, description, company, timestamp)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                                specialty_id, title, url, description,
+                                company, timestamp)
+                                VALUES (%s, %s, %s, %s, %s, %s, %s)""",
                                 (city, specialty, job['title'], job['href'],
                                     job['descript'], job['company'], today))
 
