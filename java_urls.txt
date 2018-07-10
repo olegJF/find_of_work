@@ -1,0 +1,4 @@
+https://rabota.ua/jobsearch/vacancy_list?regionId=1&keyWords=java&period=2&lastdate=
+https://jobs.dou.ua/vacancies/?city=%D0%9A%D0%B8%D0%B5%D0%B2&category=Java
+https://djinni.co/jobs/?primary_keyword=Java&location=%D0%9A%D0%B8%D0%B5%D0%B2
+https://www.work.ua/jobs-kyiv-java/

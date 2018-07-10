@@ -12,7 +12,7 @@ headers = [{'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:47.0) Gecko/20100101 
 def djinni(base_url, stop_list = ['Senior', 'Sr.']):
     base_url = base_url
     session = requests.Session()
-    urls, jobs = [], []
+    urls, jobs, errors = [], [], []
     urls.append(base_url)
     urls.append(base_url+'&page=2')
     a_href = 'https://djinni.co'
@@ -38,12 +38,18 @@ def djinni(base_url, stop_list = ['Senior', 'Sr.']):
                                         'title': title, 
                                         'descript': str(descr),
                                         'company': 'No name'})
-    return jobs
+            else:
+                errors.append({'href': url, 
+                                'title': 'djinni.co - The page is empty'})
+        else:
+            errors.append({'href': url, 
+                            'title': 'djinni.co - Page do not response'})
+    return jobs, errors
     
 
 def work(base_url, stop_list = ['Senior', 'Sr.']):
     session = requests.Session()
-    urls, jobs = [], []
+    urls, jobs, errors = [], [], []
     urls.append(base_url)
     a_href = 'https://www.work.ua'
     nmbr = random.randint(0, 2)
@@ -55,7 +61,9 @@ def work(base_url, stop_list = ['Senior', 'Sr.']):
             pages = pagination.find_all('li', attrs={'class':False})
             for page in pages:
                 urls.append(a_href+page.a['href'])
-        
+    else:
+        errors.append({'href': base_url, 
+                        'title': 'work.ua - Page do not response'})
     for url in urls:
         time.sleep(2)
         nmbr = random.randint(0, 2)
@@ -77,8 +85,13 @@ def work(base_url, stop_list = ['Senior', 'Sr.']):
                                         'descript': str(div.p.text), 
                                         'company': company
                                         })
-    
-    return jobs
+            else:
+                errors.append({'href': url, 
+                                'title': 'work.ua - The page is empty'})
+        else:
+            errors.append({'href': url, 
+                            'title': 'work.ua - Page do not response'})
+    return jobs, errors
 
     
 def rabota(base_url, stop_list = ['Senior', 'Sr.']):
@@ -86,7 +99,7 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
     from_day = yesterday.strftime('%d.%m.%Y')
     base_url = base_url + from_day
     session = requests.Session()
-    urls, jobs = [], []
+    urls, jobs, errors = [], [], []
     urls.append(base_url)
     a_href = 'https://rabota.ua'
     nmbr = random.randint(0, 2)
@@ -99,7 +112,9 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
             if pages:
                 for p in pages:
                     urls.append(a_href+p['href'])
-    
+    else:
+        errors.append({'href': base_url, 
+                        'title': 'rabota.ua - Page do not response'})
     for url in urls:
         time.sleep(2)
         nmbr = random.randint(0, 2)
@@ -128,12 +143,18 @@ def rabota(base_url, stop_list = ['Senior', 'Sr.']):
                                         'descript':str(descr), 
                                         'company': company
                                             })
-    return jobs
+            else:
+                errors.append({'href': url, 
+                                'title': 'rabota.ua - The page is empty'})
+        else:
+            errors.append({'href': url, 
+                            'title': 'rabota.ua - Page do not response'})
+    return jobs, errors
 
 
 def dou(base_url, stop_list = ['Senior', 'Sr.']):
     session = requests.Session()
-    urls, jobs = [], []
+    urls, jobs, errors = [], [], []
     urls.append(base_url)
     a_href = 'https://www.dou.ua'
     nmbr = random.randint(0, 2)
@@ -158,5 +179,11 @@ def dou(base_url, stop_list = ['Senior', 'Sr.']):
                                     'descript':str(desc.text), 
                                     'company': company
                                         })
-    return jobs
+        else:
+            errors.append({'href': base_url, 
+                            'title': 'dou.ua - The page is empty'})
+    else:
+        errors.append({'href': base_url, 
+                        'title': 'dou.ua - Page do not response'})
+    return jobs, errors
                                         

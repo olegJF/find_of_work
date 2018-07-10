@@ -64,7 +64,21 @@ else:
         requests.post( ADDRESS, auth=("api", MAILGUN_KEY), 
                             data={"from": EMAIL, "to": 'jf2@ua.fm',
                             "subject": Subject, "text": cntnt})
-    
+    cur.execute("""SELECT data FROM scraping_error WHERE timestamp=%s;""",
+                (today,))
+    errors_qs = cur.fetchone()
+    if errors_qs:
+        # print('qs')
+        data = errors_qs[0]['errors']
+        cntnt = 'На дату {}, следующие ошибки:\n'.format(today)
+        for err in data:
+            cntnt += 'url - {}, причина - {}\n'.format(err['href'], err['title'])
+        
+        Subject = 'Ошибки скрапинга, по состояниию на {}'.format(today)
+        requests.post( ADDRESS, auth=("api", MAILGUN_KEY), 
+                            data={"from": EMAIL, "to": 'find_it_1@ukr.net',
+                            "subject": Subject, "text": cntnt})
+
     # print('Done!')
     
     conn.commit()
