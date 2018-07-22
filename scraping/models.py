@@ -38,9 +38,9 @@ class Specialty(models.Model):
  
         
 class Url(models.Model):
-    city = models.ForeignKey(City, verbose_name='Город')
-    site = models.ForeignKey(Site, verbose_name='Название сайта для поиска')
-    specialty = models.ForeignKey(Specialty, verbose_name='Специальность')
+    city = models.ForeignKey(City, verbose_name='Город', on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, verbose_name='Название сайта для поиска', on_delete=models.CASCADE)
+    specialty = models.ForeignKey(Specialty, verbose_name='Специальность', on_delete=models.CASCADE)
     address = models.URLField(max_length=250, verbose_name='url')
     
     class Meta:
@@ -57,8 +57,8 @@ class Vacancy(models.Model):
     url = models.CharField(max_length=250, verbose_name='Интернет адрес вакансии', unique=True, default=None)
     description = models.TextField(verbose_name='Описание вакансии', blank=True)
     company = models.CharField(max_length=250, verbose_name='Вакансия от компании', blank=True)
-    city = models.ForeignKey(City, verbose_name='Город')
-    specialty = models.ForeignKey(Specialty, verbose_name='Специальность')
+    city = models.ForeignKey(City, verbose_name='Город', on_delete=models.CASCADE)
+    specialty = models.ForeignKey(Specialty, verbose_name='Специальность', on_delete=models.CASCADE)
     timestamp = models.DateField(auto_now_add=True)
     
     class Meta:

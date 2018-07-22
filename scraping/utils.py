@@ -69,6 +69,7 @@ def work(base_url, stop_list = ['Senior', 'Sr.']):
         nmbr = random.randint(0, 2)
         req = session.get(url, headers=headers[nmbr])
         if req.status_code == 200:
+            bsObj = BS(req.content, "html.parser")
             list_of_div = bsObj.find_all('div', attrs={'class':'job-link'})
             if list_of_div:
                 for div in list_of_div:
@@ -161,7 +162,6 @@ def dou(base_url, stop_list = ['Senior', 'Sr.']):
     req = session.get(base_url, headers=headers[nmbr])
     if req.status_code == 200:
         bsObj = BS(req.content, "html.parser")
-       
         div = bsObj.find('div', attrs={'id':'vacancyListId'})
         if div:
             vacancy_list = div.find_all('li', attrs={'class':'l-vacancy'})
