@@ -17,7 +17,7 @@ if os.path.exists(path):
     from vacancy.settings.secret import (DB_PASSWORD, DB_HOST, MAILGUN_KEY,
                                         DB_NAME, DB_USER, PASSWORD, EMAIL,
                                         API_ADDRESS, MAIL, PASSWORD_AWARD, 
-                                        USER_AWARD, FROM_EMAIL, TO_EMAIL )
+                                        USER_AWARD, FROM_EMAIL )
 else:
     DB_PASSWORD = os.environ.get('DB_PASSWORD')
     PASSWORD = os.environ.get('PASSWORD')
@@ -27,6 +27,10 @@ else:
     DB_USER = os.environ.get('DB_USER')
     MAILGUN_KEY = os.environ.get('MAILGUN_KEY')
     API_ADDRESS = os.environ.get('API_ADDRESS')
+    MAIL = os.environ.get('MAIL')
+    PASSWORD_AWARD = os.environ.get('PASSWORD_AWARD')
+    USER_AWARD = os.environ.get('USER_AWARD')
+    FROM_EMAIL = os.environ.get('FROM_EMAIL')
 
 # FROM_EMAIL = 'Вакансии <{email}>'.format(email=EMAIL)
 # SUBJECT = 'Список вакансий'
