@@ -7,6 +7,8 @@ import datetime
 import json
 
 WEEK_AGO = datetime.date.today()-datetime.timedelta(7)
+UTILS_FUNC = [(djinni, 'Djinni.co'), (work, 'Work.ua'),
+            (rabota, 'Rabota.ua'), (dou, 'Dou.ua')]
 dir = os.path.dirname(os.path.abspath('send_emails.py'))
 path = ''.join([dir, '\\vacancy\\settings\\secret.py'])
 
@@ -63,18 +65,11 @@ else:
         for url in url_list:
             tmp = {}
             tmp_content = []
-            j, e = djinni(url['Djinni.co'])
-            tmp_content.extend(j)
-            errors.extend(e)
-            j, e = work(url['Work.ua'])
-            tmp_content.extend(j)
-            errors.extend(e)
-            j, e = rabota(url['Rabota.ua'])
-            tmp_content.extend(j)
-            errors.extend(e)
-            j, e = dou(url['Dou.ua'])
-            tmp_content.extend(j)
-            errors.extend(e)
+            for (func, key) in UTILS_FUNC:
+                j, e = func(url[key])
+                tmp_content.extend(j)
+                errors.extend(e)
+
             tmp['city'] = url['city']
             tmp['specialty'] = url['specialty']
             tmp['content'] = tmp_content
