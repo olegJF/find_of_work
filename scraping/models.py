@@ -3,7 +3,7 @@ from django.contrib.postgres.fields import JSONField
 
 class City(models.Model):
     name = models.CharField(max_length=50, verbose_name='Город')
-    
+    slug = models.SlugField(blank=True)
     class Meta:
         verbose_name = 'Город'
         verbose_name_plural = 'Города'
@@ -27,6 +27,8 @@ class Site(models.Model):
 
 class Specialty(models.Model):
     name = models.CharField(max_length=50, verbose_name='Специальность')
+    slug = models.SlugField(blank=True)
+    
     
     class Meta:
         verbose_name = 'Специальность'
