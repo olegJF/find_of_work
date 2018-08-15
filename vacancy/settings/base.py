@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'scraping',
     'subscribers',
+    'rest_framework',
 
 ]
 
