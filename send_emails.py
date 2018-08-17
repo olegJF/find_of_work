@@ -42,11 +42,6 @@ template = """<!doctype html><html lang="en"><head><meta charset="utf-8">
                 <hr/><br/> """.format(today)
 end = '</body></html>'
 
-msg = MIMEMultipart('alternative')
-msg['Subject'] = 'Список вакансий за  {}'.format(today)
-msg['From'] = 'Вакансии <{email}>'.format(email=FROM_EMAIL)
-
-
 try:
     conn = psycopg2.connect(dbname=DB_NAME, user=DB_USER, host=DB_HOST,
                             password=DB_PASSWORD)
@@ -59,10 +54,7 @@ else:
                     WHERE is_active=%s;""", (True,))
     data_of_requests = set(cur.fetchall())
     # print(data_of_requests)
-    mail = smtplib.SMTP(MAIL, 587)
-    mail.ehlo()
-    mail.starttls()
-    mail.login(USER_AWARD, PASSWORD_AWARD)
+    
     for pair in data_of_requests:
         content = ''
         city = pair[0]
@@ -77,6 +69,13 @@ else:
                     (city, specialty, datetime.date.today(),))
         jobs_qs = cur.fetchall()
         # print(str(jobs_qs).encode('utf-8'))
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = 'Список вакансий за  {}'.format(today)
+        msg['From'] = 'Вакансии <{email}>'.format(email=FROM_EMAIL)
+        mail = smtplib.SMTP(MAIL, 587)
+        mail.ehlo()
+        mail.starttls()
+        mail.login(USER_AWARD, PASSWORD_AWARD)
         if jobs_qs:
             for job in jobs_qs:
                 content += '<a href="{}" target="_blank">'.format(job[0])
@@ -86,10 +85,11 @@ else:
             html_message = template + content + end
             part = MIMEText(html_message, 'html')
             msg.attach(part)
-            for email in emails:
-                msg['To'] = email
-                mail.sendmail(FROM_EMAIL, email, msg.as_string())
-                time.sleep(2)
+            mail.sendmail(FROM_EMAIL, emails, msg.as_string())
+##            for email in emails:
+##                msg['To'] = email
+##                mail.sendmail(FROM_EMAIL, email, msg.as_string())
+##                time.sleep(2)
 
                 # requests.post( API_ADDRESS, auth=("api", MAILGUN_KEY),
                 #                 data={"from": FROM_EMAIL, "to": email,
@@ -98,12 +98,14 @@ else:
             text = 'На сегодня, список вакансий по Вашему запросу, пуст.'
             part = MIMEText(text, 'plain')
             msg.attach(part)
-            for email in emails:
-                msg['To'] = email
-                mail.sendmail(FROM_EMAIL, email, msg.as_string())
-                time.sleep(2)
+            mail.sendmail(FROM_EMAIL, emails, msg.as_string())
+##            for email in emails:
+##                msg['To'] = email
+##                mail.sendmail(FROM_EMAIL, email, msg.as_string())
+##                time.sleep(2)
+        mail.quit()
     # print('Done')
     conn.commit()
     cur.close()
     conn.close()
-    mail.quit()
+    

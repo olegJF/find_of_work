@@ -9,6 +9,7 @@ from rest_framework.decorators import action
 from django.core.exceptions import ObjectDoesNotExist
 from .serializers import * 
 
+TODAY = datetime.date.today()
 
 
 class CityListAPIView(viewsets.ModelViewSet):
@@ -24,12 +25,12 @@ class SpecialtyListAPIView(viewsets.ModelViewSet):
        
 
 class VacancyListAPIView(viewsets.ModelViewSet):
-    """ Whithout get-parametrs: all objects from Vacancy.
+    """ 
     
-        ?city_slug=kyiv&specialty_slug=python
+        ?city=kyiv&specialty=python
         
-        city_slug - slug for city filter;
-        specialty_slug - filter for specialty;
+        city - slug for city filter;
+        specialty - filter for specialty;
         
         
     """
@@ -40,14 +41,13 @@ class VacancyListAPIView(viewsets.ModelViewSet):
         req = self.request
         city_slug = req.query_params.get('city')
         specialty_slug = req.query_params.get('specialty')
-        qs = Vacancy.objects.all()
+        qs = None
         
         if city_slug and specialty_slug:
             city = City.objects.filter(slug=city_slug).first()
             specialty = Specialty.objects.filter(slug=specialty_slug).first()
-            period = datetime.date.today()-datetime.timedelta(1)
-            qs = Vacancy.filter(city=city, 
-                                specialty=specialty, 
+            period = TODAY - datetime.timedelta(1)
+            qs = Vacancy.objects.filter(city=city, specialty=specialty, 
                                 timestamp__gte=period)
              
         self.queryset = qs    
