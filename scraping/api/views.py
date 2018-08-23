@@ -44,10 +44,16 @@ class VacancyListAPIView(viewsets.ModelViewSet):
         qs = None
         
         if city_slug and specialty_slug:
+            city, specialty = None, None
             city = City.objects.filter(slug=city_slug).first()
+            if not city:
+                city = City.objects.filter(slug=specialty_slug).first()
             specialty = Specialty.objects.filter(slug=specialty_slug).first()
+            if not specialty:
+                specialty = Specialty.objects.filter(slug=city_slug).first()
             period = TODAY - datetime.timedelta(1)
-            qs = Vacancy.objects.filter(city=city, specialty=specialty, 
+            if city and specialty:
+                qs = Vacancy.objects.filter(city=city, specialty=specialty, 
                                 timestamp__gte=period)
              
         self.queryset = qs    
